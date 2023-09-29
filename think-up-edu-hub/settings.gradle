@@ -4,4 +4,6 @@ include 'lecture'
 include 'payment'
 include 'user'
 include 'matchedLecture'
+include 'common'
+include 'common'
 

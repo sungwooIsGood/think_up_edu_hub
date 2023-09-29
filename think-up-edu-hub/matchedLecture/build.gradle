@@ -6,4 +6,4 @@ jar {
     enabled = true
 }
 
-dependencies {}
+dependencies { implementation project(path: ':common') }
