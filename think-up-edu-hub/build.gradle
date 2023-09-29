@@ -1,36 +1,94 @@
+buildscript {
+	ext {
+		queryDslVersion = "5.0.0" // query dsl 설정
+		springBootVersion = '2.7.16' // spring boot 버전
+	}
+
+	repositories {
+		mavenCentral()
+	}
+
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath "io.spring.gradle:dependency-management-plugin:1.0.15.RELEASE"
+	}
+}
+
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.16'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
-group = 'com.edu'
-version = '0.0.1-SNAPSHOT'
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'java-library'
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
+	apply plugin: 'com.ewerk.gradle.plugins.querydsl'
 
-java {
-	sourceCompatibility = '11'
-}
+	group = 'com.edu'
+	version = '0.0.1-SNAPSHOT'
 
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
+	java {
+		sourceCompatibility = '11'
+	}
+
+	repositories {
+		mavenCentral()
+	}
+
+	dependencies {
+		implementation 'org.springframework.boot:spring-boot-starter-web'
+		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+		implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+		implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+		compileOnly 'org.projectlombok:lombok'
+		runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+		annotationProcessor 'org.projectlombok:lombok'
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+		testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+		testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+	}
+
+	tasks.named('test') {
+		useJUnitPlatform()
+	}
+
+	def querydslDir = "$buildDir/generated/querydsl"
+
+	querydsl {
+		library = "com.querydsl:querydsl-apt"
+		jpa = true
+		querydslSourcesDir = querydslDir
+	}
+
+	sourceSets {
+		main.java.srcDir querydslDir
+	}
+
+	configurations {
+		compileOnly {
+			extendsFrom annotationProcessor
+		}
+		querydsl.extendsFrom compileClasspath
+	}
+
+	compileQuerydsl {
+		options.annotationProcessorPath = configurations.querydsl
 	}
 }
 
-repositories {
-	mavenCentral()
+project(':user') {
+	dependencies {
+		implementation 'org.springframework.boot:spring-boot-starter-security'
+		testImplementation 'org.springframework.security:spring-security-test'
+	}
 }
 
-dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-}
-
-tasks.named('test') {
-	useJUnitPlatform()
+project(':payment'){
+	dependencies {
+		implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	}
 }
