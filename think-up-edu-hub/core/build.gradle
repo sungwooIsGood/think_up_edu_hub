@@ -1,19 +1,16 @@
-plugins {
-    id 'java'
+test {
+    useJUnitPlatform()
 }
 
-group 'com.edu'
-version '0.0.1-SNAPSHOT'
+bootJar {
+    enabled = true
+}
 
-repositories {
-    mavenCentral()
+jar {
+    enabled = false
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
-}
-
-test {
-    useJUnitPlatform()
+    implementation project(path: ':user')
+    implementation project(path: ':payment')
 }
