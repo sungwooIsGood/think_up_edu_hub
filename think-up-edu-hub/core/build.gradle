@@ -13,4 +13,6 @@ jar {
 dependencies {
     implementation project(path: ':user')
     implementation project(path: ':payment')
+    implementation project(path: ':lecture')
+    implementation project(path: ':matchedLecture')
 }
