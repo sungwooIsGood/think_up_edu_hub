@@ -1,0 +1,6 @@
+rootProject.name = 'think-up-edu-hub'
+include 'user'
+include 'payment'
+include 'lecture'
+include 'matchedLecture'
+
