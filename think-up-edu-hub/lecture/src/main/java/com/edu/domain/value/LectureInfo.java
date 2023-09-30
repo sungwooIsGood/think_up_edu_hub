@@ -15,7 +15,6 @@ public class LectureInfo {
 
     private String title;
     private String description;
-    private BigDecimal price;
 
     private int capacity;
 

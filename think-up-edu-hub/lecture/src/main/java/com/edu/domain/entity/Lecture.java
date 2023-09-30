@@ -2,6 +2,7 @@ package com.edu.domain.entity;
 
 import com.edu.domain.value.LectureDuration;
 import com.edu.domain.value.LectureInfo;
+import com.edu.domain.value.PriceInfo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.edu.BaseEntity;
@@ -22,6 +23,9 @@ public class Lecture extends BaseEntity {
 
     @Embedded
     private LectureDuration lectureDuration;
+
+    @Embedded
+    private PriceInfo priceInfo;
 
 
 }
