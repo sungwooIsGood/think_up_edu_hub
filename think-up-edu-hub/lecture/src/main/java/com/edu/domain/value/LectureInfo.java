@@ -1,4 +1,4 @@
-package com.edu.lecture.value;
+package com.edu.domain.value;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

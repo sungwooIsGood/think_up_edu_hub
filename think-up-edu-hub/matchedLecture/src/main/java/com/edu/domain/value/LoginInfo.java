@@ -1,4 +1,4 @@
-package com.edu.domain.user.value;
+package com.edu.domain.value;
 
 import lombok.NoArgsConstructor;
 

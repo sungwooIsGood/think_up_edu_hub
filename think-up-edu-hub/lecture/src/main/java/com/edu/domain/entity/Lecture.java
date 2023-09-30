@@ -1,7 +1,7 @@
-package com.edu.lecture.entity;
+package com.edu.domain.entity;
 
-import com.edu.lecture.value.LectureDuration;
-import com.edu.lecture.value.LectureInfo;
+import com.edu.domain.value.LectureDuration;
+import com.edu.domain.value.LectureInfo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.edu.BaseEntity;

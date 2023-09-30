@@ -1,7 +1,7 @@
-package com.edu.domain.user.entity;
+package com.edu.domain.entity;
 
-import com.edu.domain.user.value.LoginInfo;
-import com.edu.domain.user.value.UserInfo;
+import com.edu.domain.value.LoginInfo;
+import com.edu.domain.value.UserInfo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
