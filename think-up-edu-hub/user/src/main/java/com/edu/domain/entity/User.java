@@ -5,7 +5,7 @@ import com.edu.domain.value.UserInfo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.edu.BaseEntity;
+import org.edu.entity.BaseEntity;
 
 import javax.persistence.*;
 

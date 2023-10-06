@@ -5,7 +5,7 @@ import com.edu.domain.value.LectureInfo;
 import com.edu.domain.value.PriceInfo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.edu.BaseEntity;
+import org.edu.entity.BaseEntity;
 
 import javax.persistence.*;
 

@@ -2,7 +2,7 @@ package com.edu.domain.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.edu.BaseEntity;
+import org.edu.entity.BaseEntity;
 
 import javax.persistence.*;
 

@@ -37,8 +37,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 그래서 jwt로 Bearer 방식 사용할 것, Bearer은 토큰 형식으로 날아가게 하는 것
                 .httpBasic().disable()
                 .authorizeRequests() // Http 요청에 대한 접근권한 설정 메서드 특정 url 설정할 수 있으나 나는 추가 설정 x
-                .anyRequest().authenticated() // 나머지 모든 요청은 인증이 필요하다.
-                .and()
-                .addFilterBefore(new BeforeLoginLogFilter(), UsernamePasswordAuthenticationFilter.class);
+                .antMatchers("/**").permitAll();
+//                .anyRequest().authenticated() // 나머지 모든 요청은 인증이 필요하다.
+//                .and()
+//                .addFilterBefore(new BeforeLoginLogFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }
