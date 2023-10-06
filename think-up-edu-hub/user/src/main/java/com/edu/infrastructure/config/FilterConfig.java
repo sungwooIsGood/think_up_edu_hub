@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class FilterConfig {
 
+    @Deprecated
     @Bean
     public FilterRegistrationBean<BeforeLoginLogFilter> beforeLoginLogFilter(){
         FilterRegistrationBean<BeforeLoginLogFilter> bean = new FilterRegistrationBean<BeforeLoginLogFilter>(new BeforeLoginLogFilter());
