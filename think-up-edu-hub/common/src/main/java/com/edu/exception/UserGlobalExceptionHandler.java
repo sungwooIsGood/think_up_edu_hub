@@ -1,8 +1,8 @@
-package com.edu.infrastructure.exception;
+package com.edu.exception;
 
-import org.edu.enums.ErrorCode;
-import org.edu.entity.BasicErrorResponse;
-import org.edu.entity.BasicResponse;
+import com.edu.entity.BasicErrorResponse;
+import com.edu.entity.BasicResponse;
+import com.edu.enums.ErrorCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

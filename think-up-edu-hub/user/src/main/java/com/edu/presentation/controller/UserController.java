@@ -1,7 +1,7 @@
 package com.edu.presentation.controller;
 
+import com.edu.entity.BasicResponse;
 import lombok.RequiredArgsConstructor;
-import org.edu.entity.BasicResponse;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

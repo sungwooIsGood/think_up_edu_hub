@@ -1,10 +1,10 @@
-package org.edu.entity;
+package com.edu.entity;
 
+import com.edu.enums.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.edu.enums.ErrorCode;
 
 @AllArgsConstructor
 @NoArgsConstructor

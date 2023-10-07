@@ -1,4 +1,4 @@
-package org.edu.entity;
+package com.edu.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

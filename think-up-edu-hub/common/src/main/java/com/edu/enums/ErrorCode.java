@@ -1,4 +1,4 @@
-package org.edu.enums;
+package com.edu.enums;
 
 import lombok.Getter;
 

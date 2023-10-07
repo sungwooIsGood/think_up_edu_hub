@@ -3,9 +3,9 @@ package com.edu.domain.entity;
 import com.edu.domain.value.LectureDuration;
 import com.edu.domain.value.LectureInfo;
 import com.edu.domain.value.PriceInfo;
+import com.edu.entity.BaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.edu.entity.BaseEntity;
 
 import javax.persistence.*;
 

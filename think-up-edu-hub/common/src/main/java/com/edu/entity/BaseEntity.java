@@ -1,4 +1,4 @@
-package org.edu.entity;
+package com.edu.entity;
 
 import lombok.Data;
 import lombok.Getter;
