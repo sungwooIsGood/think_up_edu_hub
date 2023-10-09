@@ -9,15 +9,15 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Getter
-public class UserLoginResponse {
+public class UserLoginItem {
 
-    private Long id;
+    private Long userId;
     private UserInfo userInfo;
     private LoginInfo loginInfo;
 
     @Builder
-    public UserLoginResponse(User user) {
-        this.id = user.getUserId();
+    public UserLoginItem(User user) {
+        this.userId = user.getUserId();
         this.userInfo = user.getUserInfo();
         this.loginInfo = user.getLoginInfo();
     }

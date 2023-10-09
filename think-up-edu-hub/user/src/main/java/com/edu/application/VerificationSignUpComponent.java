@@ -36,30 +36,33 @@ public class VerificationSignUpComponent {
     }
 
     public boolean verifyPassword(String password) {
-        String numberString = "0123456789";
-        String specialCharacterString = "!@#$%^&*()_+-=[]{},./<>?~\\|;:\"`";
 
-        int numberCount = 0;
-        int englishCount = 0;
-        int specialCharacterCount = 0;
+        if(Objects.nonNull(password)){
+            String numberString = "0123456789";
+            String specialCharacterString = "!@#$%^&*()_+-=[]{},./<>?~\\|;:\"`";
 
-        for (int i = 0; i < password.length(); i++) {
-            if (numberString.indexOf(password.charAt(i)) != -1) {
-                numberCount++;
+            int numberCount = 0;
+            int englishCount = 0;
+            int specialCharacterCount = 0;
+
+            for (int i = 0; i < password.length(); i++) {
+                if (numberString.indexOf(password.charAt(i)) != -1) {
+                    numberCount++;
+                }
+
+                if (specialCharacterString.indexOf(password.charAt(i)) != -1) {
+                    specialCharacterCount++;
+                }
+
+                if ((password.charAt(i) >= 'a' && password.charAt(i) <= 'z') || (password.charAt(i) >= 'A' && password.charAt(i) <= 'Z')) {
+                    englishCount++;
+                }
             }
 
-            if (specialCharacterString.indexOf(password.charAt(i)) != -1) {
-                specialCharacterCount++;
+            if (specialCharacterCount >= 1 && englishCount >= 2 && numberCount >= 6) {
+                log.info("영문/숫자/특수문자를 모두 입력하였음. 입력값: {}",password);
+                return true;
             }
-
-            if ((password.charAt(i) >= 'a' && password.charAt(i) <= 'z') || (password.charAt(i) >= 'A' && password.charAt(i) <= 'Z')) {
-                englishCount++;
-            }
-        }
-
-        if (specialCharacterCount >= 1 && englishCount >= 2 && numberCount >= 6) {
-            log.info("영문/숫자/특수문자를 모두 입력하였음. 입력값: {}",password);
-            return true;
         }
 
         log.info("영문/숫자/특수문자 중 하나를 충족하지 못함. 입력값: {}",password);

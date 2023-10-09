@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
@@ -35,10 +37,12 @@ public class UserController {
     @PostMapping("/login")
     public BasicResponse login(UserLoginRequest userLoginRequest){
 
-        userService.login(userLoginRequest);
-
+        HashMap<String,Object> responseData = new HashMap<>();
+        String accessToken = userService.login(userLoginRequest);
+        responseData.put("accessToken",accessToken);
         return BasicResponse.builder()
                 .status(HttpStatus.OK.value())
+                .data(responseData)
                 .build();
     }
 }

@@ -1,6 +1,6 @@
 package com.edu.infrastructure.database.queryDsl;
 
-import com.edu.domain.dto.UserLoginResponse;
+import com.edu.domain.dto.UserLoginItem;
 import com.edu.domain.entity.QUser;
 import com.edu.domain.entity.User;
 import com.querydsl.core.types.Projections;
@@ -20,23 +20,23 @@ public class UserQRepository {
 
     private final JPAQueryFactory query;
 
-    public UserLoginResponse findByUsernameAndPassword(String username, String password){
+    public UserLoginItem findByUsernameAndPassword(String username, String password){
 
-        UserLoginResponse userLoginResponse = query.select(Projections.constructor(UserLoginResponse.class, user))
+        UserLoginItem userLoginItem = query.select(Projections.constructor(UserLoginItem.class, user))
                 .from(user)
                 .where(user.loginInfo.username.eq(username))
                 .fetchOne();
 
-        checkUsernameAndPwdIsTrue(userLoginResponse,password);
+        checkUsernameAndPwdIsTrue(userLoginItem,password);
 
-        return userLoginResponse;
+        return userLoginItem;
     }
 
-    private void checkUsernameAndPwdIsTrue(UserLoginResponse userLoginResponse, String password) {
+    private void checkUsernameAndPwdIsTrue(UserLoginItem userLoginItem, String password) {
 
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-        if(Objects.isNull(userLoginResponse) || !passwordEncoder.matches(password,userLoginResponse.getLoginInfo().getPassword())){
+        if(Objects.isNull(userLoginItem) || !passwordEncoder.matches(password,userLoginItem.getLoginInfo().getPassword())){
             throw new IllegalArgumentException("아이디 혹은 비밀번호가 틀렸습니다.");
         }
     }

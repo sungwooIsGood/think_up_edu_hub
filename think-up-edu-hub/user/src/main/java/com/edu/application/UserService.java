@@ -1,9 +1,10 @@
 package com.edu.application;
 
 import com.edu.domain.dto.UserLoginRequest;
-import com.edu.domain.dto.UserLoginResponse;
+import com.edu.domain.dto.UserLoginItem;
 import com.edu.domain.dto.UserSignUpRequest;
 import com.edu.domain.entity.User;
+import com.edu.domain.service.JwtAuthService;
 import com.edu.infrastructure.database.jpa.UserJRepository;
 import com.edu.infrastructure.database.queryDsl.UserQRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,18 +22,19 @@ public class UserService {
     private final UserQRepository userQRepository;
     private final VerificationSignUpComponent verificationSignUpComponent;
     private final PasswordEncoder passwordEncoder;
+    private final JwtAuthService jwtAuthService;
+
     @Transactional
-    public UserLoginResponse login(UserLoginRequest userLoginRequest){
+    public String login(UserLoginRequest userLoginRequest){
 
         // check login verification
         checkLoginRequestIsNull(userLoginRequest.getUsername(),userLoginRequest.getPassword());
 
         // check is same login
-        UserLoginResponse userLoginResponse = userQRepository.findByUsernameAndPassword(userLoginRequest.getUsername(), userLoginRequest.getPassword());
+        UserLoginItem userLoginItem = userQRepository.findByUsernameAndPassword(userLoginRequest.getUsername(), userLoginRequest.getPassword());
 
         // jwt 토큰발급
-
-        return null;
+        return jwtAuthService.authenticateLogin(userLoginItem);
     }
 
     private void checkLoginRequestIsNull(String username, String password) {
@@ -56,6 +58,7 @@ public class UserService {
             String encodePassword = passwordEncoder.encode(userSignUpRequest.getPassword()); // 비밀번호 인코딩
             User user = userSignUpRequest.createdUser(encodePassword);
             userJRepository.save(user);
+            return true;
         }
 
         throw new IllegalArgumentException("잘못된 값이 넘어왔습니다. 입력값: " + userSignUpRequest);

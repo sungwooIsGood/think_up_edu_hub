@@ -1,6 +1,7 @@
 package com.edu.domain.dto;
 
 import com.edu.domain.entity.User;
+import com.edu.domain.enums.RoleType;
 import com.edu.domain.enums.UserType;
 import com.edu.domain.value.LoginInfo;
 import com.edu.domain.value.UserInfo;
@@ -32,6 +33,8 @@ public class UserSignUpRequest {
                 .gender(this.gender)
                 .phoneNumber(this.phoneNumber)
                 .address(this.address)
+                .userType(this.userType)
+                .roleType(RoleType.USER)
                 .build();
     }
 
