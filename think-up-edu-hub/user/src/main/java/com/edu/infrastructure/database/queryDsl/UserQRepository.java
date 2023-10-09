@@ -3,14 +3,14 @@ package com.edu.infrastructure.database.queryDsl;
 import com.edu.domain.dto.UserLoginResponse;
 import com.edu.domain.entity.QUser;
 import com.edu.domain.entity.User;
-import com.edu.domain.repository.UserRepository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import java.util.Objects;
-import java.util.Optional;
 
 import static com.edu.domain.entity.QUser.user;
 
@@ -24,19 +24,19 @@ public class UserQRepository {
 
         UserLoginResponse userLoginResponse = query.select(Projections.constructor(UserLoginResponse.class, user))
                 .from(user)
-                .where(user.loginInfo.username.eq(username)
-                        .and(user.loginInfo.password.eq(password))
-                )
+                .where(user.loginInfo.username.eq(username))
                 .fetchOne();
 
-        checkUsernameAndPwdIsTrue(userLoginResponse);
+        checkUsernameAndPwdIsTrue(userLoginResponse,password);
 
         return userLoginResponse;
     }
 
-    private void checkUsernameAndPwdIsTrue(UserLoginResponse userLoginResponse) {
+    private void checkUsernameAndPwdIsTrue(UserLoginResponse userLoginResponse, String password) {
 
-        if(Objects.isNull(userLoginResponse)){
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+        if(Objects.isNull(userLoginResponse) || !passwordEncoder.matches(password,userLoginResponse.getLoginInfo().getPassword())){
             throw new IllegalArgumentException("아이디 혹은 비밀번호가 틀렸습니다.");
         }
     }

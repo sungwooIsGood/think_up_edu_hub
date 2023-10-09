@@ -26,7 +26,13 @@ public class UserService {
 
         // check login verification
         checkLoginRequestIsNull(userLoginRequest.getUsername(),userLoginRequest.getPassword());
-        return userQRepository.findByUsernameAndPassword(userLoginRequest.getUsername(),userLoginRequest.getPassword());
+
+        // check is same login
+        UserLoginResponse userLoginResponse = userQRepository.findByUsernameAndPassword(userLoginRequest.getUsername(), userLoginRequest.getPassword());
+
+        // jwt 토큰발급
+
+        return null;
     }
 
     private void checkLoginRequestIsNull(String username, String password) {
