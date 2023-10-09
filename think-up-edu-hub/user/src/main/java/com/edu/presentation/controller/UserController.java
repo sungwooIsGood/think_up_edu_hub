@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 
 @RestController
@@ -35,14 +36,16 @@ public class UserController {
      * 로그인
      */
     @PostMapping("/login")
-    public BasicResponse login(UserLoginRequest userLoginRequest){
+    public BasicResponse login(UserLoginRequest userLoginRequest, HttpServletResponse response){
 
-        HashMap<String,Object> responseData = new HashMap<>();
         String accessToken = userService.login(userLoginRequest);
-        responseData.put("accessToken",accessToken);
+
+        // Access-Control-Expose-Headers는 JavaScript가 "Authorization" 헤더에 액세스할 수 있도록 허용하는 역할
+        response.addHeader("Access-Control-Expose-Headers", "Authorization");
+        response.addHeader("Authorization", String.format("Bearer %s", accessToken));
+
         return BasicResponse.builder()
                 .status(HttpStatus.OK.value())
-                .data(responseData)
                 .build();
     }
 }
