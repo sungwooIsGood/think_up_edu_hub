@@ -31,4 +31,19 @@ public class UserGlobalExceptionHandler {
                 .error(new BasicErrorResponse(ErrorCode.INVALID_VALUE))
                 .build();
     }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public BasicResponse IllegalStateException(IllegalStateException e, HttpServletRequest request) {
+
+        HashMap<String, Object> responseData = new HashMap<>();
+        log.info("url: {}, message: {}", request.getRequestURI(), e.getMessage());
+
+        responseData.put("message", e.getMessage());
+
+        return BasicResponse.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .data(responseData)
+                .error(new BasicErrorResponse(ErrorCode.INVALID_VALUE))
+                .build();
+    }
 }
