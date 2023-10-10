@@ -5,12 +5,11 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.edu.domain.dto.JwtTokenGroup;
 import com.edu.domain.dto.UserLoginItem;
 import com.edu.domain.service.JwtAuthService;
-import com.edu.infrastructure.database.jpa.UserJRepository;
+import com.edu.domain.repository.UserJRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
@@ -43,7 +42,7 @@ public class JwtAuthServiceImpl implements JwtAuthService {
         return JWT.create()
                 .withIssuer("ian") // 토큰 발급자
                 .withIssuedAt(Date.from(now.toInstant(ZoneOffset.UTC)).toInstant()) // 토큰 생성 시간
-                .withExpiresAt(Date.from(now.plusMinutes(5).toInstant(ZoneOffset.UTC)).toInstant()) // 토큰 만료 시간
+                .withExpiresAt(Date.from(now.plusDays(5).toInstant(ZoneOffset.UTC)).toInstant()) // 토큰 만료 시간
                 .withClaim("userId", userId)
                 .sign(Algorithm.HMAC256(secretKey));// 암호화 기법
     }
@@ -55,7 +54,7 @@ public class JwtAuthServiceImpl implements JwtAuthService {
         return JWT.create()
                 .withIssuer("ian") // 토큰 발급자
                 .withIssuedAt(Date.from(now.toInstant(ZoneOffset.UTC)).toInstant()) // 토큰 생성 시간
-                .withExpiresAt(Date.from(now.plusMinutes(5).toInstant(ZoneOffset.UTC)).toInstant()) // 토큰 만료 시간
+                .withExpiresAt(Date.from(now.plusDays(15).toInstant(ZoneOffset.UTC)).toInstant()) // 토큰 만료 시간
                 .withClaim("userId", userId)
                 .sign(Algorithm.HMAC256(secretKey));// 암호화 기법
     }

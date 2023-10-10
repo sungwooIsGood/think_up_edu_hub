@@ -1,4 +1,4 @@
-package com.edu.infrastructure.database.jpa;
+package com.edu.domain.repository;
 
 import com.edu.domain.entity.User;
 import com.edu.domain.repository.UserRepository;

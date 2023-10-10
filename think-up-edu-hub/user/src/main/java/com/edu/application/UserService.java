@@ -4,9 +4,9 @@ import com.edu.domain.dto.UserLoginRequest;
 import com.edu.domain.dto.UserLoginItem;
 import com.edu.domain.dto.UserSignUpRequest;
 import com.edu.domain.entity.User;
+import com.edu.domain.repository.UserRepository;
 import com.edu.domain.service.JwtAuthService;
-import com.edu.infrastructure.database.jpa.UserJRepository;
-import com.edu.infrastructure.database.queryDsl.UserQRepository;
+import com.edu.domain.repository.UserJRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ import java.util.Objects;
 public class UserService {
 
     private final UserJRepository userJRepository;
-    private final UserQRepository userQRepository;
+    private final UserRepository userRepository;
     private final VerificationSignUpComponent verificationSignUpComponent;
     private final PasswordEncoder passwordEncoder;
     private final JwtAuthService jwtAuthService;
@@ -31,7 +31,7 @@ public class UserService {
         checkLoginRequestIsNull(userLoginRequest.getUsername(),userLoginRequest.getPassword());
 
         // check is same login
-        UserLoginItem userLoginItem = userQRepository.findByUsernameAndPassword(userLoginRequest.getUsername(), userLoginRequest.getPassword());
+        UserLoginItem userLoginItem = userRepository.findByUsernameAndPassword(userLoginRequest.getUsername(), userLoginRequest.getPassword());
 
         // jwt 토큰발급
         return jwtAuthService.authenticateLogin(userLoginItem);

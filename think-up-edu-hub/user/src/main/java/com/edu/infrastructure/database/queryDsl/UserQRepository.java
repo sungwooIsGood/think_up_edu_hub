@@ -3,6 +3,7 @@ package com.edu.infrastructure.database.queryDsl;
 import com.edu.domain.dto.UserLoginItem;
 import com.edu.domain.entity.QUser;
 import com.edu.domain.entity.User;
+import com.edu.domain.repository.UserRepository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +17,11 @@ import static com.edu.domain.entity.QUser.user;
 
 @Repository
 @RequiredArgsConstructor
-public class UserQRepository {
+public class UserQRepository implements UserRepository {
 
     private final JPAQueryFactory query;
 
+    @Override
     public UserLoginItem findByUsernameAndPassword(String username, String password){
 
         UserLoginItem userLoginItem = query.select(Projections.constructor(UserLoginItem.class, user))
@@ -41,6 +43,7 @@ public class UserQRepository {
         }
     }
 
+    @Override
     public boolean findByUsername(String username) {
 
         User user = query.select(QUser.user)
