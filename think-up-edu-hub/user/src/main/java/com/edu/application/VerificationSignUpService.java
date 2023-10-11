@@ -1,7 +1,6 @@
 package com.edu.application;
 
 import com.edu.domain.dto.UserSignUpRequest;
-import com.edu.domain.repository.UserRepository;
 import com.edu.infrastructure.database.queryDsl.UserQRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -12,9 +11,8 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class VerificationSignUpComponent {
+public class VerificationSignUpService {
 
-    private final UserRepository userRepository;
     private final UserQRepository userQRepository;
     private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
 

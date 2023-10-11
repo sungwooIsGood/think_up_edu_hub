@@ -1,5 +1,6 @@
 package com.edu.infrastructure.database.queryDsl;
 
+import com.edu.domain.dto.LoginVerifyItem;
 import com.edu.domain.dto.UserLoginItem;
 import com.edu.domain.entity.QUser;
 import com.edu.domain.entity.User;
@@ -7,6 +8,8 @@ import com.edu.domain.repository.UserRepository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
@@ -20,6 +23,7 @@ import static com.edu.domain.entity.QUser.user;
 public class UserQRepository implements UserRepository {
 
     private final JPAQueryFactory query;
+    private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @Override
     public UserLoginItem findByUsernameAndPassword(String username, String password){
@@ -55,5 +59,20 @@ public class UserQRepository implements UserRepository {
             throw new IllegalArgumentException("똑같은 이메일이 존재합니다.");
         }
         return true;
+    }
+
+    @Override
+    public LoginVerifyItem findById(Long userId) {
+        LoginVerifyItem loginVerifyItem = query.select(Projections.constructor(LoginVerifyItem.class, user))
+                .from(user)
+                .where(user.userId.eq(userId))
+                .fetchOne();
+
+        if(Objects.isNull(loginVerifyItem)){
+            log.info("들어온 userId: {}",userId);
+            throw new IllegalStateException("찾고자 하는 유저의 정보가 없습니다.");
+        }
+
+        return loginVerifyItem;
     }
 }

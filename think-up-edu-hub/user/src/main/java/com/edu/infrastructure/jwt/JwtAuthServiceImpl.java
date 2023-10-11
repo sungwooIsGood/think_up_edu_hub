@@ -11,7 +11,9 @@ import com.edu.domain.dto.UserLoginItem;
 import com.edu.domain.service.JwtAuthService;
 import com.edu.domain.repository.UserJRepository;
 import com.google.gson.Gson;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.asm.Advice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,20 +34,21 @@ public class JwtAuthServiceImpl implements JwtAuthService {
     private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @Override
-    public JwtTokenGroup authenticateLogin(UserLoginItem userLoginItem){
-        return createJwtToken(userLoginItem.getUserId());
+    public JwtTokenGroup createAccAndRefreshToken(Long userId){
+        return createJwtToken(userId);
     }
 
     private JwtTokenGroup createJwtToken(Long userId) {
-        String accessJwtToken = createAccessJwtToken(userId);
-        String refreshJwtToken = createRefreshJwtToken(userId);
+
+        LocalDateTime now = LocalDateTime.now();
+
+        String accessJwtToken = createAccessJwtToken(userId,now);
+        String refreshJwtToken = createRefreshJwtToken(userId,now);
 
         return JwtTokenGroup.createdJwtTokenGroup(accessJwtToken,refreshJwtToken);
     }
 
-    private String createAccessJwtToken(Long userId) {
-
-        LocalDateTime now = LocalDateTime.now();
+    private String createAccessJwtToken(Long userId,LocalDateTime now) {
 
         return JWT.create()
                 .withIssuer("ian") // 토큰 발급자
@@ -55,9 +58,7 @@ public class JwtAuthServiceImpl implements JwtAuthService {
                 .sign(Algorithm.HMAC256(secretKey));// 암호화 기법
     }
 
-    private String createRefreshJwtToken(Long userId) {
-
-        LocalDateTime now = LocalDateTime.now();
+    private String createRefreshJwtToken(Long userId,LocalDateTime now) {
 
         return JWT.create()
                 .withIssuer("ian") // 토큰 발급자
@@ -68,7 +69,7 @@ public class JwtAuthServiceImpl implements JwtAuthService {
     }
 
     @Override
-    public String getExpiredAccessToken(String authorizationToken) {
+    public String getAccessTokenByHeader(String authorizationToken) {
 
         String expiredAccessToken= "";
 
@@ -79,16 +80,17 @@ public class JwtAuthServiceImpl implements JwtAuthService {
         try {
             expiredAccessToken = authorizationToken.split("Bearer ")[1];
         }catch (ArrayIndexOutOfBoundsException e){
-            throw new IllegalStateException("헤더에 토큰이 존재하지 않습니다.");
+            log.info("헤더를 통해 값이 들어왔지만 예외 발생, authorizationToken: {}",authorizationToken);
+            throw new IllegalStateException("헤더에 토큰이 존재하지 않거나 값이 옳바르지 않습니다.");
         }
 
         return expiredAccessToken;
     }
 
     @Override
-    public JwtPayload getExpiredAccessTokenByJwtDecode(String expiredAccessToken) {
+    public JwtPayload getPayloadByJwtDecode(String accessToken) {
 
-        String payload = getJwtPayload(expiredAccessToken);
+        String payload = getJwtPayload(accessToken);
         String decodedPayload = decodeBase64Payload(payload);
         return getJwtPayloadData(decodedPayload);
     }
@@ -96,8 +98,8 @@ public class JwtAuthServiceImpl implements JwtAuthService {
     private String getJwtPayload(String expiredAccessToken) {
         String payload = "";
         try{
-            Algorithm algorithm = Algorithm.HMAC256(secretKey);
-            JWTVerifier verifier = JWT.require(algorithm).build(); // 토큰 검증을 위한 verifier 생성
+            Algorithm ALGORITHM = Algorithm.HMAC256(secretKey);
+            JWTVerifier verifier = JWT.require(ALGORITHM).build(); // 토큰 검증을 위한 verifier 생성
             DecodedJWT jwt = verifier.verify(expiredAccessToken); // 토큰 검증 및 디코딩
             payload = jwt.getPayload();
         } catch (JWTVerificationException e){
@@ -117,4 +119,13 @@ public class JwtAuthServiceImpl implements JwtAuthService {
         Gson gson = new Gson();
         return gson.fromJson(decodedPayload,JwtPayload.class);
     }
+
+    @Override
+    public boolean validateTokenExpiredDate(String accessToken){
+        Algorithm ALGORITHM = Algorithm.HMAC256(secretKey);
+        JWTVerifier verifier = JWT.require(ALGORITHM).build(); // 토큰 검증을 위한 verifier 생성
+        DecodedJWT jwt = verifier.verify(accessToken); // 토큰 검증 및 디코딩
+        return jwt.getExpiresAt().after(new Date());
+    }
+
 }

@@ -14,12 +14,12 @@ public class JwtPayload {
 
     @JsonProperty("exp")
     private int exp;
-    private String userId;
+    private Long userId;
     private String tokenIssuer;
 
     @Builder
     public JwtPayload(int tokenCreatedAt, int tokenExpireAt,
-                      String userId, String tokenIssuer) {
+                      Long userId, String tokenIssuer) {
         this.iat = tokenCreatedAt;
         this.exp = tokenExpireAt;
         this.userId = userId;
