@@ -58,7 +58,13 @@ public class UserService {
     }
 
     private void saveRefreshTokenForRedis(Long userId, String refreshToken) {
+
         ValueOperations<String, Object> valueOptions = redisTemplate.opsForValue();
+
+        if(Objects.isNull(valueOptions.get("refresh_token:" + userId))){
+            deleteRefreshToken(userId);
+        }
+
         valueOptions.set("refresh_token:" + userId,refreshToken,15, TimeUnit.DAYS);
     }
 
