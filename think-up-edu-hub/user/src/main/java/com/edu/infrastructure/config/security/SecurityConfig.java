@@ -1,4 +1,4 @@
-package com.edu.infrastructure.config;
+package com.edu.infrastructure.config.security;
 
 import com.edu.infrastructure.config.filter.BeforeLoginLogFilter;
 import lombok.RequiredArgsConstructor;

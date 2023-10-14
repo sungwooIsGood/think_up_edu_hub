@@ -16,7 +16,7 @@ public class LectureInfo {
     private String title;
     private String description;
 
-    private int capacity;
+    private int capacity; // 강의 수용수
 
     @Enumerated(value = EnumType.STRING)
     private LectureState lectureState;
