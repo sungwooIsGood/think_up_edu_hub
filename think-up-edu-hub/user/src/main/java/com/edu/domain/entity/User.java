@@ -38,8 +38,10 @@ public class User extends BaseEntity {
             this.userInfo = null;
             this.loginInfo = null;
             this.deleteCk = true;
+            return true;
         } else{
             this.deleteCk = false;
+            return false;
         }
 
     }
