@@ -23,10 +23,24 @@ public class User extends BaseEntity {
     @Embedded
     private LoginInfo loginInfo;
 
+    private boolean deleteCk;
+
     @Builder
     public User(Long userId, UserInfo userInfo, LoginInfo loginInfo) {
         this.userId = userId;
         this.userInfo = userInfo;
         this.loginInfo = loginInfo;
+    }
+
+    public boolean isSamePassword(String password){
+
+        if(loginInfo.getPassword().equals(password)){
+            this.userInfo = null;
+            this.loginInfo = null;
+            this.deleteCk = true;
+        } else{
+            this.deleteCk = false;
+        }
+
     }
 }

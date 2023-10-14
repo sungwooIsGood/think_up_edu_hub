@@ -7,6 +7,8 @@ import com.edu.domain.repository.UserRepository;
 import com.edu.domain.service.JwtAuthService;
 import com.edu.domain.repository.UserJRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,10 +25,11 @@ public class UserService {
 
     private final UserJRepository userJRepository;
     private final UserRepository userRepository;
-    private final VerificationSignUpService verificationSignUpComponent;
+    private final VerificationSignUpService verificationSignUpService;
     private final PasswordEncoder passwordEncoder;
     private final JwtAuthService jwtAuthService;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @Transactional
     public String login(UserLoginRequest userLoginRequest){
@@ -61,7 +64,7 @@ public class UserService {
 
         ValueOperations<String, Object> valueOptions = redisTemplate.opsForValue();
 
-        if(Objects.isNull(valueOptions.get("refresh_token:" + userId))){
+        if(Objects.nonNull(valueOptions.get("refresh_token:" + userId))){
             deleteRefreshToken(userId);
         }
 
@@ -70,7 +73,7 @@ public class UserService {
 
     @Transactional
     public boolean signUp(UserSignUpRequest userSignUpRequest) {
-        boolean isSignUpOk = verificationSignUpComponent.verifyCanSignUp(userSignUpRequest);
+        boolean isSignUpOk = verificationSignUpService.verifyCanSignUp(userSignUpRequest);
 
         // 회원가입 로직
         if(isSignUpOk){
@@ -124,7 +127,8 @@ public class UserService {
 
     @Transactional
     public void logout(String authorizationToken){
-        JwtPayload jwtPayload = jwtAuthService.getPayloadByJwtDecode(authorizationToken);
+        String accessToken = jwtAuthService.getAccessTokenByHeader(authorizationToken);
+        JwtPayload jwtPayload = jwtAuthService.getPayloadByJwtDecode(accessToken);
         deleteRefreshToken(jwtPayload.getUserId()); // 레디스에서 기존 refresh 토큰 삭제
     }
 
@@ -165,5 +169,22 @@ public class UserService {
 
         throw new IllegalStateException("예상치 못한 예외 케이스가 발생 authorizationToken: " + authorizationToken);
 
+    }
+
+    @Transactional
+    public void signOut(String password, String authorizationToken) {
+        String accessToken = jwtAuthService.getAccessTokenByHeader(authorizationToken); // header에 acc 토큰이 없으면 로그인한 사람x
+        JwtPayload jwtPayload = jwtAuthService.getPayloadByJwtDecode(accessToken);
+        deleteRefreshToken(jwtPayload.getUserId());
+
+        String encodePwd = passwordEncoder.encode(password);
+        User user = userJRepository.findById(jwtPayload.getUserId()).orElseThrow(() -> {
+            throw new IllegalStateException("회원을 찾을 수가 없습니다. access token: " + accessToken);
+        });
+
+        if(!user.isSamePassword(encodePwd)) {
+            log.info("들어온 password 입력값: {}", password);
+            throw new IllegalArgumentException("비밀번호를 옳바르게 입력 해주세요.");
+        }
     }
 }

@@ -27,6 +27,13 @@ public class JwtAspect {
     private final JwtAuthService jwtAuthService;
     private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
+    /**
+     * 해당 AOP는 jwt 검증을 실시
+     * - header에 auth 값이 없으면 비로그인
+     * - 만료된 access token을 가져왔을 경우 access와 refresh token 재발급 후 header에 넣어주기
+     * - 만료되지 않은 access token을 가져왔을 경우 그냥 로그인 사용자라고 반환
+     * - 잘못된 auth 값을 가져왔을 경우 jwtAuthService에서 예외를 터트림. TODO 잠만, 예외는 터지되 controller에서 작동하지 않았기 때문에 정상적인지는 확인해야함. try/catch로 막자.
+     */
     @Around("@annotation(JwtVerification)")
     public Object jwtVerification(ProceedingJoinPoint jp) throws Throwable {
 
@@ -43,14 +50,14 @@ public class JwtAspect {
 
         if (Objects.nonNull(accessToken)) {
             JwtPayload payloadByJwtDecode = jwtAuthService.getPayloadByJwtDecode(accessToken);
-            boolean accessTokenExpiredIsBefore = jwtAuthService.validateTokenExpiredDate(accessToken);
+            boolean IsBeforeAccessTokenExpired = jwtAuthService.validateTokenExpiredDate(accessToken);
 
-            if(!accessTokenExpiredIsBefore){
+            if(!IsBeforeAccessTokenExpired){
                 newAccessToken = userService.resetAccessTokenByRefreshToken(authorizationToken);
                 jwtVerifyResultItem = JwtVerifyResultItem.createJwtVerifyResultItemByNewAcc(payloadByJwtDecode,newAccessToken);
             }
 
-            if(accessTokenExpiredIsBefore){
+            if(IsBeforeAccessTokenExpired){
                 jwtVerifyResultItem = JwtVerifyResultItem.createJwtVerifyResultItemByValid(payloadByJwtDecode,newAccessToken);
             }
 
@@ -62,6 +69,20 @@ public class JwtAspect {
 
         objects[objects.length - 1] = jwtVerifyResultItem;
         return jp.proceed(objects);
+    }
+
+
+    @Around("@annotation(JwtHeaderReader)")
+    public Object jwtHeaderReader(ProceedingJoinPoint jp) throws Throwable {
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        Object[] objects = jp.getArgs().clone(); // method의 파라미터 값 클론
+
+        String authorizationToken = request.getHeader("Authorization");
+
+        objects[objects.length-1] = authorizationToken;
+
+        return jp.proceed(objects); // 메서드 실행
     }
 
 }
