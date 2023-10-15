@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/lecture")
@@ -25,7 +27,7 @@ public class LectureController {
      */
     @JwtVerification
     @PostMapping("")
-    public BasicResponse post(LectureRegisterRequest lectureRegisterRequest, JwtVerifyResultItem jwtVerifyResultItem){
+    public BasicResponse post(@Valid LectureRegisterRequest lectureRegisterRequest, JwtVerifyResultItem jwtVerifyResultItem){
 
         if(jwtVerifyResultItem.isLogin()){
             lectureService.post(lectureRegisterRequest,jwtVerifyResultItem.getUserId());
