@@ -53,6 +53,7 @@ public class Lecture extends BaseEntity {
                 .description(lectureRegisterRequest.getDescription())
                 .capacity(lectureRegisterRequest.getCapacity())
                 .lectureState(lectureRegisterRequest.getLectureState())
+                .lectureType(lectureRegisterRequest.getLectureType())
                 .build();
     }
 

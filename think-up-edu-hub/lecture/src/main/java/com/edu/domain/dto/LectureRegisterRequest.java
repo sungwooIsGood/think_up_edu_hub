@@ -1,5 +1,6 @@
 package com.edu.domain.dto;
 
+import com.edu.domain.enums.LectureType;
 import com.edu.domain.value.LectureState;
 import lombok.*;
 
@@ -35,4 +36,7 @@ public class LectureRegisterRequest {
 
     @NotNull(message = "과외를 할인 하신다면 할인율을 적어주세요.")
     private Double discountRate;
+
+    @NotNull(message = "과외 종류를 적어주세요.")
+    private LectureType lectureType;
 }

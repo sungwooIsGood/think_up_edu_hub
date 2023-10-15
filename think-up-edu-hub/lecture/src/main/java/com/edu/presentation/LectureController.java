@@ -43,4 +43,8 @@ public class LectureController {
                     .build();
         }
     }
+
+    /**
+     * 과외 보기
+     */
 }
