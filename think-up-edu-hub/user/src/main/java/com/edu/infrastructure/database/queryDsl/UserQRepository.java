@@ -4,6 +4,7 @@ import com.edu.domain.dto.LoginVerifyItem;
 import com.edu.domain.dto.UserLoginItem;
 import com.edu.domain.entity.QUser;
 import com.edu.domain.entity.User;
+import com.edu.domain.enums.UserType;
 import com.edu.domain.repository.UserRepository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.edu.domain.entity.QUser.user;
 
@@ -74,5 +76,15 @@ public class UserQRepository implements UserRepository {
         }
 
         return loginVerifyItem;
+    }
+
+    @Override
+    public User findByIdAboutTeacher(Long userId) {
+        return Optional.ofNullable(query.select(QUser.user)
+                .from(QUser.user)
+                .where(QUser.user.userId.eq(userId)
+                        .and(QUser.user.userInfo.userType.eq(UserType.TEACHER))
+                )
+                .fetchOne()).orElseThrow(() -> new IllegalStateException("선생님만이 과목을 등록할 수 있습니다."));
     }
 }

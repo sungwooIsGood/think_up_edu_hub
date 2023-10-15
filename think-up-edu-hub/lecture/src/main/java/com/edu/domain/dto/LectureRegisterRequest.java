@@ -3,6 +3,7 @@ package com.edu.domain.dto;
 import com.edu.domain.value.LectureState;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
