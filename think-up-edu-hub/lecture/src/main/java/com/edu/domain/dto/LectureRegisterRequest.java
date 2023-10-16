@@ -2,7 +2,9 @@ package com.edu.domain.dto;
 
 import com.edu.domain.enums.LectureType;
 import com.edu.domain.value.LectureState;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -23,9 +25,11 @@ public class LectureRegisterRequest {
     private LectureState lectureState = LectureState.ACTIVE;
 
     @NotNull(message = "과외 시작시간을 적어주세요.")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startDate;
 
     @NotNull(message = "과외 종료시간을 적어주세요.")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endDate;
 
     @NotNull(message = "과외의 가격을 적어주세요.")

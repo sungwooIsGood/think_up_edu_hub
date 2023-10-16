@@ -80,10 +80,10 @@ public class UserQRepository implements UserRepository {
 
     @Override
     public User findByIdAboutTeacher(Long userId) {
-        return Optional.ofNullable(query.select(QUser.user)
-                .from(QUser.user)
-                .where(QUser.user.userId.eq(userId)
-                        .and(QUser.user.userInfo.userType.eq(UserType.TEACHER))
+        return Optional.ofNullable(query.select(user)
+                .from(user)
+                .where(user.userId.eq(userId)
+                        .and(user.userInfo.userType.eq(UserType.TEACHER))
                 )
                 .fetchOne()).orElseThrow(() -> new IllegalStateException("선생님만이 과목을 등록할 수 있습니다."));
     }
