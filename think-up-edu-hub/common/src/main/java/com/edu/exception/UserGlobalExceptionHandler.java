@@ -3,6 +3,7 @@ package com.edu.exception;
 import com.edu.entity.BasicErrorResponse;
 import com.edu.entity.BasicResponse;
 import com.edu.enums.ErrorCode;
+import com.edu.exception.custom.RedissonLockException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -75,6 +76,51 @@ public class UserGlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST.value())
                 .data(responseData)
                 .error(new BasicErrorResponse(ErrorCode.NULL_VALUE))
+                .build();
+    }
+
+    @ExceptionHandler(IllegalMonitorStateException.class)
+    public BasicResponse IllegalMonitorStateException(IllegalMonitorStateException e, HttpServletRequest request) {
+
+        HashMap<String, Object> responseData = new HashMap<>();
+        log.info("url: {}, message: {}", request.getRequestURI(), e.getMessage());
+
+        responseData.put("message", e.getMessage());
+
+        return BasicResponse.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .data(responseData)
+                .error(new BasicErrorResponse(ErrorCode.INVALID_UNLOCK_OPERATION))
+                .build();
+    }
+
+    @ExceptionHandler(RedissonLockException.class)
+    public BasicResponse RedissonLockException(RedissonLockException e, HttpServletRequest request) {
+
+        HashMap<String, Object> responseData = new HashMap<>();
+        log.info("url: {}, message: {}", request.getRequestURI(), e.getMessage());
+
+        responseData.put("message", e.getMessage());
+
+        return BasicResponse.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .data(responseData)
+                .error(new BasicErrorResponse(ErrorCode.LOCK_NOT_AVAILABLE))
+                .build();
+    }
+
+    @ExceptionHandler(InterruptedException.class)
+    public BasicResponse InterruptedException(InterruptedException e, HttpServletRequest request) {
+
+        HashMap<String, Object> responseData = new HashMap<>();
+        log.info("url: {}, message: {}", request.getRequestURI(), e.getMessage());
+
+        responseData.put("message", e.getMessage());
+
+        return BasicResponse.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .data(responseData)
+                .error(new BasicErrorResponse(ErrorCode.INTERRUPTED_EXCEPTION))
                 .build();
     }
 }

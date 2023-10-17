@@ -6,4 +6,8 @@ jar {
     enabled = true
 }
 
-dependencies { implementation project(path: ':common') }
+dependencies {
+    implementation project(path: ':common')
+    implementation project(path: ':lecture')
+    implementation project(path: ':user')
+}

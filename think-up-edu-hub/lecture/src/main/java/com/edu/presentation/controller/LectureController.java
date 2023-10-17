@@ -1,4 +1,4 @@
-package com.edu.presentation;
+package com.edu.presentation.controller;
 
 import com.edu.domain.dto.JwtVerifyResultItem;
 import com.edu.domain.dto.LectureRegisterRequest;
