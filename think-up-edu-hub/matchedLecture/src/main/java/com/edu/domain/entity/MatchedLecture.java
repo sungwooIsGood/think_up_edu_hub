@@ -23,4 +23,11 @@ public class MatchedLecture extends BaseEntity {
         this.lectureId = lectureId;
         this.userId = userId;
     }
+
+    public static MatchedLecture createdMatchedLecture(Long userId, Long lectureId){
+        return MatchedLecture.builder()
+                .lectureId(lectureId)
+                .userId(userId)
+                .build();
+    }
 }

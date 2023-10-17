@@ -9,9 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
-
-public interface LectureRepository extends JpaRepository<Lecture,Long> {
+public interface LectureJRepository extends JpaRepository<Lecture,Long> {
 
     @Query("select new com.edu.domain.dto.LectureListResponse(l,u)" +
             " from Lecture l" +

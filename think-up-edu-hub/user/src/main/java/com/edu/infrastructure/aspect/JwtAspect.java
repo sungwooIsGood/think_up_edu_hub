@@ -32,7 +32,7 @@ public class JwtAspect {
      * - header에 auth 값이 없으면 비로그인
      * - 만료된 access token을 가져왔을 경우 access와 refresh token 재발급 후 header에 넣어주기
      * - 만료되지 않은 access token을 가져왔을 경우 그냥 로그인 사용자라고 반환
-     * - 잘못된 auth 값을 가져왔을 경우 jwtAuthService에서 예외를 터트림. TODO 잠만, 예외는 터지되 controller에서 작동하지 않았기 때문에 정상적인지는 확인해야함. try/catch로 막자.
+     * - 잘못된 auth 값을 가져왔을 경우 jwtAuthService에서 예외를 터트림.
      */
     @Around("@annotation(JwtVerification)")
     public Object jwtVerification(ProceedingJoinPoint jp) throws Throwable {

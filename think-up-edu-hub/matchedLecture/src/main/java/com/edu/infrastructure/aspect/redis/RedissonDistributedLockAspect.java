@@ -22,8 +22,8 @@ public class RedissonDistributedLockAspect {
 
     private final RedissonClient redissonClient;
     private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
-    @Value("${spring.redis.rock}")
-    private final String rockName;
+    @Value("${redis.distributed.rock}")
+    private String rockName;
 
     @Around("@annotation(DistributedLock)")
     public Object lock(ProceedingJoinPoint jp) throws Throwable{
@@ -46,7 +46,6 @@ public class RedissonDistributedLockAspect {
             log.info("멀티 스레드 환경에서 예외가 발생하였습니다.");
             throw new InterruptedException();
         } finally {
-
             try {
                 rLock.unlock();
             } catch (IllegalMonitorStateException e) {
