@@ -1,12 +1,12 @@
 package com.edu.presentation.controller;
 
 import com.edu.application.MatchedLectureService;
+import com.edu.application.RedissonDistributedLockService;
 import com.edu.domain.dto.JwtVerifyResultItem;
 import com.edu.entity.BasicErrorResponse;
 import com.edu.entity.BasicResponse;
 import com.edu.enums.ErrorCode;
 import com.edu.infrastructure.aspect.JwtVerification;
-import com.edu.infrastructure.aspect.redis.DistributedLock;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,16 +22,16 @@ import java.util.Map;
 @RequestMapping("/api/matched")
 public class MatchedLectureController {
 
-    private final MatchedLectureService matchedLectureService;
+    private final RedissonDistributedLockService redissonDistributedLockService;
 
     @JwtVerification
     @PostMapping("/{lectureId}")
     public BasicResponse registerLecture(@PathVariable(name = "lectureId") Long lectureId,
-                                         JwtVerifyResultItem jwtVerifyResultItem){
+                                         JwtVerifyResultItem jwtVerifyResultItem) throws Throwable {
 
         if(jwtVerifyResultItem.isLogin()){
 
-            Long lectureIdAfterSave = matchedLectureService.registerLecture(jwtVerifyResultItem.getUserId(), lectureId);
+            Long lectureIdAfterSave = redissonDistributedLockService.lock(jwtVerifyResultItem.getUserId(), lectureId);
 
             Map<String,Object> responseData = new HashMap<>();
             responseData.put("lecturedId",lectureIdAfterSave);

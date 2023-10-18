@@ -1,46 +1,43 @@
-package com.edu.infrastructure.aspect.redis;
+package com.edu.application;
 
 import com.edu.exception.custom.RedissonLockException;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Method;
+import java.util.concurrent.TimeUnit;
 
-@Component
-@Aspect
+@Service
 @RequiredArgsConstructor
-public class RedissonDistributedLockAspect {
+public class RedissonDistributedLockService {
 
     private final RedissonClient redissonClient;
+    private final MatchedLectureService matchedLectureService;
     private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
     @Value("${redis.distributed.rock}")
     private String rockName;
+    private Long waitTime = 5L;
+    private Long leaseTime = 5L;
+    private TimeUnit timeUnit = TimeUnit.SECONDS;
 
-    @Around("@annotation(DistributedLock)")
-    public Object lock(ProceedingJoinPoint jp) throws Throwable{
+    @Transactional
+    public Long lock(Long userId, Long lectureId) throws Throwable{
 
-        MethodSignature signature = (MethodSignature) jp.getSignature(); // 현재 메서드의 시그니처 가져오기
-        Method method = signature.getMethod(); // 타겟 메서드 가져오기
-        DistributedLock distributedLock = method.getAnnotation(DistributedLock.class); //
         RLock rLock = redissonClient.getLock(rockName);
 
         try{
-            boolean successGetLock = rLock.tryLock(distributedLock.waitTime(),distributedLock.leaseTime(),distributedLock.timeUnit());
+            boolean successGetLock = rLock.tryLock(waitTime,leaseTime,timeUnit);
 
             if (!successGetLock) {
                 throw new RedissonLockException("과외 신청하면서 선착순 실패");
             }
 
-            return jp.proceed();
+            return matchedLectureService.isExceedThNumberOfCapacity(userId,lectureId);
 
         } catch (InterruptedException e) {
             log.info("멀티 스레드 환경에서 예외가 발생하였습니다.");
