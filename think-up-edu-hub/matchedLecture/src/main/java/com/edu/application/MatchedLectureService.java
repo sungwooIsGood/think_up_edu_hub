@@ -1,5 +1,6 @@
 package com.edu.application;
 
+import com.edu.domain.entity.Lecture;
 import com.edu.domain.entity.MatchedLecture;
 import com.edu.domain.repository.LectureJRepository;
 import com.edu.domain.repository.MatchedLectureJRepository;
@@ -7,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -18,18 +21,30 @@ public class MatchedLectureService {
 
     public Long isExceedThNumberOfCapacity(Long userId, Long lectureId) {
 
-        int capacity = lectureJRepository.findById(lectureId).orElseThrow(
-                () -> new IllegalStateException("찾고자 하는 강의가 없습니다. lectureId: " + lectureId)
-        ).getLectureInfo().getCapacity();
+        Lecture lecture = lectureJRepository.findById(lectureId).orElseThrow(
+                () -> new IllegalStateException("찾고자 하는 강의가 없습니다. lectureId: " + lectureId));
 
-        Long matchedStudentCount = matchedLectureJRepository.countByLectureId(lectureId);
+        vaildateIsPossibleLecture(lecture);
+        
+        return saveMatchedLecture(userId,lectureId);
+    }
+
+    private void vaildateIsPossibleLecture(Lecture lecture) {
+
+        LocalDateTime startDate = lecture.getLectureDuration().getStartDate();
+        LocalDateTime now = LocalDateTime.now();
+
+        if(now.isAfter(startDate)){
+            throw new IllegalStateException("수강 신청 날짜가 지났습니다.");
+        }
+
+        int capacity = lecture.getLectureInfo().getCapacity();
+        Long matchedStudentCount = matchedLectureJRepository.countByLectureId(lecture.getLectureId());
         log.info("현재 수강 신청 인원: {}",matchedStudentCount);
 
         if(capacity < matchedStudentCount + 1){
             throw new IllegalStateException("수강 신청 인원이 모두 꽉 찾습니다.");
         }
-
-        return saveMatchedLecture(userId,lectureId);
     }
 
     private Long saveMatchedLecture(Long userId, Long lectureId) {
