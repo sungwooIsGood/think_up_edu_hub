@@ -1,9 +1,9 @@
 package com.edu.application;
 
 import com.edu.domain.entity.Lecture;
-import com.edu.domain.entity.MatchedLecture;
+import com.edu.domain.matchedLecture.entity.MatchedLecture;
 import com.edu.domain.repository.LectureJRepository;
-import com.edu.domain.repository.MatchedLectureJRepository;
+import com.edu.domain.matchedLecture.repository.MatchedLectureJRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

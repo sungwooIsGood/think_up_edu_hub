@@ -1,4 +1,4 @@
-package com.edu.domain.value;
+package com.edu.domain.matchedLecture.value;
 
 import lombok.NoArgsConstructor;
 

@@ -1,4 +1,4 @@
-package com.edu.domain.repository;
+package com.edu.domain.matchedLecture.repository;
 
 import org.springframework.stereotype.Repository;
 

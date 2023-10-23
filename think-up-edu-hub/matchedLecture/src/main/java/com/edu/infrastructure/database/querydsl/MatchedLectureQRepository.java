@@ -1,6 +1,6 @@
 package com.edu.infrastructure.database.querydsl;
 
-import com.edu.domain.repository.MatchedLectureRepository;
+import com.edu.domain.matchedLecture.repository.MatchedLectureRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
