@@ -11,7 +11,7 @@ public class MatchedLecturePayCheckScheduler {
 
     private final MatchedLectureSchedulerService matchedLectureSchedulerService;
 
-    @Scheduled(cron = "0 0/1 * * * *")
+    @Scheduled(cron = "0/20 * * * * *")
     public void payCheckScheduler(){
         matchedLectureSchedulerService.checkIsPayComplete();
     }

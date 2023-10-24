@@ -1,75 +1,77 @@
 package com.edu.application;
 
+import com.edu.domain.matchedLecture.dto.SendEmailEvent;
 import com.edu.domain.matchedLecture.entity.MatchedLecture;
-import com.edu.domain.matchedLecture.service.SendEmailService;
+import com.edu.domain.matchedLecture.service.EmailMessageQueue;
 import com.edu.domain.payment.dto.PaymentDto;
 import com.edu.domain.payment.repository.PaymentJRepository;
-import com.edu.domain.repository.LectureJRepository;
 import com.edu.domain.matchedLecture.repository.MatchedLectureJRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Queue;
 
 @Service
 @RequiredArgsConstructor
 public class MatchedLectureSchedulerService {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
-    private final LectureJRepository lectureJRepository;
     private final MatchedLectureJRepository matchedLectureJRepository;
     private final PaymentJRepository paymentJRepository;
-    private final SendEmailService sendEmailService;
+    private final EmailMessageQueue emailMessageQueue;
     private final LocalDateTime now = LocalDateTime.now();
+    private final ApplicationEventPublisher publisher;
 
     @Transactional
     public void checkIsPayComplete() {
 
-
         // startTime 전에 모든 lecture탐색
         List<MatchedLecture> matchedLectureList = matchedLectureJRepository.findAllLectureJoinWithStartTimeBeforeNow();
+        Queue<Long> messageQueue = new LinkedList();
 
-        matchedLectureList.stream()
-                .forEach(matchedLecture -> {
+        for(MatchedLecture matchedLecture: matchedLectureList){
 
-                    // 1. 페이먼츠에 없으면
-                    PaymentDto paymentDto = paymentJRepository.findByMatchedLectureId(matchedLecture.getMatchedLectureId());
+            PaymentDto paymentDto = paymentJRepository.findByMatchedLectureId(matchedLecture.getMatchedLectureId());
+            if(Objects.isNull(paymentDto)){
 
-                    if(Objects.isNull(paymentDto)){
+                Duration duration = Duration.between(now, matchedLecture.getCreatedAt());
 
+                if(validateIsNotPay(matchedLecture,duration)){
+                    continue;
+                }
 
-                        validateIsPay(matchedLecture);
+                try{
+                    emailMessageQueue.addMessageQueueForSendEmail(messageQueue,matchedLecture.getUserId()
+                            ,duration,matchedLecture.getSendEmailCount());
+                } catch (Exception e){
+                    log.info("메세지 큐에 데이터를 담으면서 에러가 발생하였습니다.");
+                    messageQueue.clear(); // TODO 요구사항: queue를 담으면서 에러가 발생하면 모두 전송 x, 에러는 에러이기에 지워주어야 한다.
+                    e.printStackTrace();
+                }
+            }
+        }
 
-                        // 3. 이메일 발송
-                        validateSendEmail(matchedLecture);
-                    }
-                });
+        log.info("이메일을 보낼 queue size: {}",messageQueue.size());
+        publisher.publishEvent(new SendEmailEvent(messageQueue));
     }
 
     /**
-     * TODO 깊은 복사 시 엔티티 복사 어떻게 되는지 테스트 해야함.
-     * @param matchedLecture
+     * 3일 이후면 soft delete 진행, 이메일 전송 x
      */
-    private void validateIsPay(MatchedLecture matchedLecture) {
-        MatchedLecture matchedLectureCopy = matchedLecture.copyMatchedLecture(matchedLecture); // TODO 굳이 해야한?
-        // 2. 현재시간과 비교해서 matchedLecture 데이터가 3일이 넘었으면 matchedLecture에서 소프트 딜리트 진행
-        Duration threeDayDurationCheck = Duration.between(now, matchedLectureCopy.getCreatedAt());
-        if(threeDayDurationCheck.toMinutes() >= 4320){
-            matchedLectureCopy.softDelete();
+    private boolean validateIsNotPay(MatchedLecture matchedLecture, Duration duration) {
+        if(duration.toMinutes() >= 4320){
+            matchedLecture.softDelete();
+            return true;
         }
-    }
-
-    private void validateSendEmail(MatchedLecture matchedLecture) {
-        Duration oneDayDurationCheck = Duration.between(now.toLocalDate(),matchedLecture.getCreatedAt());
-        if(oneDayDurationCheck.toDays() != matchedLecture.getSendEmailCount()){
-            sendEmailService.sendEmail();
-            matchedLecture.sendEmailCountUp();
-        }
+        return false;
     }
 }
