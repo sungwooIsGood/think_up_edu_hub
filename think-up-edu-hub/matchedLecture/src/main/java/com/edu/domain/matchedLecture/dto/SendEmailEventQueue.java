@@ -8,12 +8,12 @@ import java.util.Queue;
 
 @Getter
 @NoArgsConstructor
-public class SendEmailEvent {
+public class SendEmailEventQueue {
 
     private Queue<Long> messageQueue;
 
     @Builder
-    public SendEmailEvent(Queue<Long> messageQueue) {
+    public SendEmailEventQueue(Queue<Long> messageQueue) {
         this.messageQueue = messageQueue;
     }
 }

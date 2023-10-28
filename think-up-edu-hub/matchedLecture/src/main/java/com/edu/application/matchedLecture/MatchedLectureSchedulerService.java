@@ -1,9 +1,10 @@
-package com.edu.application;
+package com.edu.application.matchedLecture;
 
-import com.edu.domain.matchedLecture.dto.SendEmailEvent;
+import com.edu.domain.matchedLecture.dto.SendEmailEventQueue;
 import com.edu.domain.matchedLecture.entity.MatchedLecture;
 import com.edu.domain.matchedLecture.service.EmailMessageQueue;
 import com.edu.domain.payment.dto.PaymentDto;
+import com.edu.domain.payment.enums.PaymentStatus;
 import com.edu.domain.payment.repository.PaymentJRepository;
 import com.edu.domain.matchedLecture.repository.MatchedLectureJRepository;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +41,9 @@ public class MatchedLectureSchedulerService {
 
         for(MatchedLecture matchedLecture: matchedLectureList){
 
-            PaymentDto paymentDto = paymentJRepository.findByMatchedLectureId(matchedLecture.getMatchedLectureId());
+            PaymentDto paymentDto = paymentJRepository.findByMatchedLectureIdAndPaymentStatus(
+                    matchedLecture.getMatchedLectureId(), PaymentStatus.PAID);
+
             if(Objects.isNull(paymentDto)){
 
                 Duration duration = Duration.between(now, matchedLecture.getCreatedAt());
@@ -61,7 +64,7 @@ public class MatchedLectureSchedulerService {
         }
 
         log.info("이메일을 보낼 queue size: {}",messageQueue.size());
-        publisher.publishEvent(new SendEmailEvent(messageQueue));
+        publisher.publishEvent(new SendEmailEventQueue(messageQueue));
     }
 
     /**

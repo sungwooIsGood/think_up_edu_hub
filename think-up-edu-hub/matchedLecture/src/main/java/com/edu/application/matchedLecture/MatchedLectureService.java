@@ -1,4 +1,4 @@
-package com.edu.application;
+package com.edu.application.matchedLecture;
 
 import com.edu.domain.entity.Lecture;
 import com.edu.domain.matchedLecture.entity.MatchedLecture;

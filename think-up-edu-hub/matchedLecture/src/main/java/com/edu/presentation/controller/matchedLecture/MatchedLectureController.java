@@ -1,7 +1,6 @@
-package com.edu.presentation.controller;
+package com.edu.presentation.controller.matchedLecture;
 
-import com.edu.application.MatchedLectureService;
-import com.edu.application.RedissonDistributedLockService;
+import com.edu.application.matchedLecture.RedissonDistributedLockService;
 import com.edu.domain.dto.JwtVerifyResultItem;
 import com.edu.entity.BasicErrorResponse;
 import com.edu.entity.BasicResponse;

@@ -40,6 +40,7 @@ subprojects {
 	}
 
 	dependencies {
+		implementation 'org.springframework.boot:spring-boot-starter-webflux'
 		implementation 'org.springframework.boot:spring-boot-starter-data-redis:2.4.2'
 		implementation 'org.springframework.session:spring-session-data-redis:2.4.2'
 		implementation 'org.redisson:redisson-spring-boot-starter:3.17.7'
@@ -55,6 +56,7 @@ subprojects {
 		testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 		implementation 'com.google.code.gson:gson:2.8.9'
 		implementation 'org.springframework.boot:spring-boot-starter-validation'
+		implementation 'org.springframework.boot:spring-boot-starter-mail'
 	}
 
 	tasks.named('test') {

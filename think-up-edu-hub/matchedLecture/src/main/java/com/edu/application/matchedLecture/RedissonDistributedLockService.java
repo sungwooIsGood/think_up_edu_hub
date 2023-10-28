@@ -1,4 +1,4 @@
-package com.edu.application;
+package com.edu.application.matchedLecture;
 
 import com.edu.exception.custom.RedissonLockException;
 import lombok.RequiredArgsConstructor;

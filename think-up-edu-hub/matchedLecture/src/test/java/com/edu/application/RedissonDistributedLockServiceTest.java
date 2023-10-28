@@ -1,5 +1,6 @@
 package com.edu.application;
 
+import com.edu.application.matchedLecture.RedissonDistributedLockService;
 import com.edu.domain.dto.LectureRegisterRequest;
 import com.edu.domain.dto.UserSignUpRequest;
 import com.edu.domain.entity.Lecture;

@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 @NoArgsConstructor
 @Getter
 public class PaymentDto {
@@ -12,11 +15,11 @@ public class PaymentDto {
     private Long matchedLectureId;
     private Long lectureId;
     private Long userId;
-    private Long payDay;
-    private Long price;
+    private LocalDateTime payDay;
+    private BigDecimal price;
 
     @Builder
-    public PaymentDto(Long paymentId, Long matchedLectureId, Long lectureId, Long userId, Long payDay, Long price) {
+    public PaymentDto(Long paymentId, Long matchedLectureId, Long lectureId, Long userId, LocalDateTime payDay, BigDecimal price) {
         this.paymentId = paymentId;
         this.matchedLectureId = matchedLectureId;
         this.lectureId = lectureId;
