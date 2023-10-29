@@ -101,21 +101,27 @@ public class PortOnePaymentService implements ExternalPaymentService {
 
                     if (response.statusCode().equals(HttpStatus.OK)) {
                         return response.bodyToMono(String.class);
+                    }
 
-                    } else if (response.statusCode().value() == 401) {
+                    if (response.statusCode().value() == 401) {
                         log.info("에러 반환 코드: {}", response.statusCode().value());
                         throw new IllegalStateException("Token이 전달되지 않았거나 유효하지 않습니다. 토큰 재발급 필요");
-                    } else if (response.statusCode().value() == 404) {
+                    }
+
+                    if (response.statusCode().value() == 404) {
                         log.info("에러 반환 코드: {}", response.statusCode().value());
                         throw new IllegalStateException("유효하지 않은 imp_uid입니다. 다시 확인하세요. imp_uid: " + impUid);
                     } else {
+                        log.error("예상치 못한 에러 발생, 에러 반환 코드: {}",response.statusCode().value());
                         return response.createException()
                                 .flatMap(Mono::error);
                     }
                 })
                 .block();
-        System.out.println(request);
-        return null;
+
+        Gson gson = new Gson();
+        PaymentResponse paymentResponse = gson.fromJson(request, PaymentResponse.class);
+        return paymentResponse;
     }
 
     private String getPortOneAccessToken() {
