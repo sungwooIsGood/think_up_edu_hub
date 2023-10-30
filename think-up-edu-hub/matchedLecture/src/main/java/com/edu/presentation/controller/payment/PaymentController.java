@@ -2,11 +2,13 @@ package com.edu.presentation.controller.payment;
 
 import com.edu.application.payment.PaymentService;
 import com.edu.domain.payment.dto.BeforePaymentVerificationItem;
+import com.edu.domain.payment.dto.PaymentCancelRequest;
 import com.edu.domain.payment.dto.PaymentResponse;
 import com.edu.domain.payment.dto.PaymentVerificationRequest;
 import com.edu.entity.BasicResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +26,7 @@ public class PaymentController {
     /**
      * 결제 완료 전 사전 검증
      */
+    @PostMapping("/prepare")
     public BasicResponse beforeCheckPayment(BeforePaymentVerificationItem beforePaymentVerificationRequest){
 
         paymentService.beforeCheckPayment(beforePaymentVerificationRequest);
@@ -57,7 +60,12 @@ public class PaymentController {
      * 결제 취소
      */
     @PostMapping("/cancel")
-    public BasicResponse doPaymentCancel(){
-        return null;
+    public BasicResponse cancelPayment(PaymentCancelRequest paymentCancelRequest){
+
+        paymentService.cancelPayment(paymentCancelRequest);
+
+        return BasicResponse.builder()
+                .status(HttpStatus.OK.value())
+                .build();
     }
 }

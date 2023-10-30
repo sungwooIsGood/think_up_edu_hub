@@ -1,9 +1,6 @@
 package com.edu.application.payment;
 
-import com.edu.domain.payment.dto.BeforePaymentVerificationItem;
-import com.edu.domain.payment.dto.PaymentDto;
-import com.edu.domain.payment.dto.PaymentResponse;
-import com.edu.domain.payment.dto.PaymentVerificationRequest;
+import com.edu.domain.payment.dto.*;
 import com.edu.domain.payment.entity.Payment;
 import com.edu.domain.payment.enums.PaymentStatus;
 import com.edu.domain.payment.repository.PaymentJRepository;
@@ -67,7 +64,7 @@ public class PaymentService {
 
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public void beforeCheckPayment(BeforePaymentVerificationItem beforePaymentVerificationRequest) {
         BeforePaymentVerificationItem beforePaymentVerificationItem = externalPaymentService.verifyBeforePayment(beforePaymentVerificationRequest);
 
@@ -91,4 +88,17 @@ public class PaymentService {
         }
     }
 
+    @Transactional
+    public void cancelPayment(PaymentCancelRequest paymentCancelRequest) {
+        Payment payment = paymentJRepository.findByImpUidAndMerchantUid(paymentCancelRequest.getImpUid()
+                , paymentCancelRequest.getMerchantUid());
+
+        if(paymentCancelRequest.getCancelPrice().equals(payment.getPrice())){
+            throw new IllegalStateException("입력한 환불금액과 결제한 금액이 다릅니다.");
+        }
+
+        PaymentResponse paymentResponse = externalPaymentService.cancelPayment(paymentCancelRequest);
+
+        payment.cancelPayment(paymentResponse.getResponseData().getCancelledAt(),paymentResponse.getResponseData().getStatus());
+    }
 }

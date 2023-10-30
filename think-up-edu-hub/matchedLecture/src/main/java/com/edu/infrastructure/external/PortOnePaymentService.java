@@ -3,6 +3,7 @@ package com.edu.infrastructure.external;
 import com.edu.component.CommonComponent;
 import com.edu.domain.payment.dto.BeforePaymentVerificationItem;
 import com.edu.domain.payment.dto.AccessTokenResponse;
+import com.edu.domain.payment.dto.PaymentCancelRequest;
 import com.edu.domain.payment.dto.PaymentResponse;
 import com.edu.domain.payment.service.ExternalPaymentService;
 import com.google.gson.Gson;
@@ -39,6 +40,7 @@ public class PortOnePaymentService implements ExternalPaymentService {
     private final String accessTokenResponseUrl = "/users/getToken";
     private final String verificationUrl = "/payments/{imp_uid}";
     private final String beforePaymentsUrl = "/payments/prepare";
+    private final String cancelUrl = "/payments/cancel";
 
     @Override
     public AccessTokenResponse getAccessToken() {
@@ -154,15 +156,41 @@ public class PortOnePaymentService implements ExternalPaymentService {
     @Override
     public BeforePaymentVerificationItem verifyBeforePayment(BeforePaymentVerificationItem beforePaymentVerificationRequest) {
 
-        AccessTokenResponse portOneAccessToken = checkIsAccessTokenExpired();
-
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("merchant_uid", beforePaymentVerificationRequest.getMerchantUuid());
         formData.add("amount", String.valueOf(beforePaymentVerificationRequest.getAmount()));
 
-        String request = webClient.post()
-                .uri(beforePaymentsUrl)
-                .header("Authorization", "Bearer " + portOneAccessToken.getResponse().getAccessToken())
+        Gson gson = new Gson();
+        String request = sendPostApi(formData);
+        BeforePaymentVerificationItem beforePaymentVerificationItem = gson.fromJson(request, BeforePaymentVerificationItem.class);
+
+        return beforePaymentVerificationItem;
+    }
+
+    @Override
+    public PaymentResponse cancelPayment(PaymentCancelRequest paymentCancelRequest) {
+
+        MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+        formData.add("imp_uid", paymentCancelRequest.getImpUid());
+        formData.add("merchant_uid", paymentCancelRequest.getMerchantUid());
+        formData.add("reason", paymentCancelRequest.getCancelReason());
+
+        Gson gson = new Gson();
+        String request = sendPostApi(formData);
+        PaymentResponse paymentResponse = gson.fromJson(request, PaymentResponse.class);
+
+        if(paymentResponse.getCode() != 0){
+            log.error("imp_uid: {}, merchant_uid: {}",paymentCancelRequest.getImpUid(),paymentCancelRequest.getMerchantUid());
+            throw new IllegalStateException("환불에 실패했습니다.");
+        }
+
+        return paymentResponse;
+    }
+
+    private String sendPostApi(MultiValueMap<String, String> formData) {
+
+        return webClient.post()
+                .uri(cancelUrl)
                 .body(BodyInserters.fromFormData(formData))
                 .exchangeToMono(response -> {
 
@@ -174,15 +202,11 @@ public class PortOnePaymentService implements ExternalPaymentService {
                         log.info("에러 반환 코드: {}", response.statusCode().value());
                         throw new IllegalStateException("Token이 전달되지 않았거나 유효하지 않습니다. 토큰 재발급 필요");
                     } else {
-                        log.error("예상치 못한 에러 발생, 에러 반환 코드: {}",response.statusCode().value());
+                        log.error("예상치 못한 에러 발생, 에러 반환 코드: {}", response.statusCode().value());
                         return response.createException()
                                 .flatMap(Mono::error);
                     }
                 })
                 .block();
-
-        Gson gson = new Gson();
-        BeforePaymentVerificationItem beforePaymentVerificationItem = gson.fromJson(request, BeforePaymentVerificationItem.class);
-        return beforePaymentVerificationItem;
     }
 }

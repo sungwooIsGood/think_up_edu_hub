@@ -13,4 +13,6 @@ public interface PaymentJRepository extends JpaRepository<Payment,Long> {
     PaymentDto findByMatchedLectureIdAndPaymentStatus(Long matchedLectureId, PaymentStatus paymentStatus);
 
     PaymentDto findByAmountAndMerchantUid(BigDecimal amount, String merchantUuid);
+
+    Payment findByImpUidAndMerchantUid(String impUid,String merchantUid);
 }
