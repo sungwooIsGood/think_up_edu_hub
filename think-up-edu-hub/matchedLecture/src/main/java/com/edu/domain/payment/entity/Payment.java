@@ -48,17 +48,4 @@ public class Payment extends BaseEntity {
         this.merchantUid = merchantUid;
     }
 
-//    public static Payment createdPayment(Long userId,Long matchedLectureId,Long lectureId,PaymentResponse paymentResponse){
-//        return Payment.builder()
-//                .matchedLectureId(matchedLectureId)
-//                .lectureId(lectureId)
-//                .userId(userId)
-//                .payDay(CommonComponent.convertTimestampToLocalDateTime(paymentResponse.getPaidAt()))
-//                .price()
-//                .payMethod()
-//                .paymentStatus()
-//                .impUid()
-//                .merchantUid()
-//                .build();
-//    }
 }

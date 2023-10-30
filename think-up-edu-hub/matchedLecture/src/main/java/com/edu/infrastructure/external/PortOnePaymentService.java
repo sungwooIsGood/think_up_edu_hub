@@ -1,6 +1,7 @@
 package com.edu.infrastructure.external;
 
 import com.edu.component.CommonComponent;
+import com.edu.domain.payment.dto.BeforePaymentVerificationItem;
 import com.edu.domain.payment.dto.AccessTokenResponse;
 import com.edu.domain.payment.dto.PaymentResponse;
 import com.edu.domain.payment.service.ExternalPaymentService;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -36,6 +38,7 @@ public class PortOnePaymentService implements ExternalPaymentService {
     private final WebClient webClient;
     private final String accessTokenResponseUrl = "/users/getToken";
     private final String verificationUrl = "/payments/{imp_uid}";
+    private final String beforePaymentsUrl = "/payments/prepare";
 
     @Override
     public AccessTokenResponse getAccessToken() {
@@ -146,5 +149,40 @@ public class PortOnePaymentService implements ExternalPaymentService {
         } else{
             return portOneAccessToken;
         }
+    }
+
+    @Override
+    public BeforePaymentVerificationItem verifyBeforePayment(BeforePaymentVerificationItem beforePaymentVerificationRequest) {
+
+        AccessTokenResponse portOneAccessToken = checkIsAccessTokenExpired();
+
+        MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+        formData.add("merchant_uid", beforePaymentVerificationRequest.getMerchantUuid());
+        formData.add("amount", String.valueOf(beforePaymentVerificationRequest.getAmount()));
+
+        String request = webClient.post()
+                .uri(beforePaymentsUrl)
+                .header("Authorization", "Bearer " + portOneAccessToken.getResponse().getAccessToken())
+                .body(BodyInserters.fromFormData(formData))
+                .exchangeToMono(response -> {
+
+                    if (response.statusCode().equals(HttpStatus.OK)) {
+                        return response.bodyToMono(String.class);
+                    }
+
+                    if (response.statusCode().value() == 401) {
+                        log.info("에러 반환 코드: {}", response.statusCode().value());
+                        throw new IllegalStateException("Token이 전달되지 않았거나 유효하지 않습니다. 토큰 재발급 필요");
+                    } else {
+                        log.error("예상치 못한 에러 발생, 에러 반환 코드: {}",response.statusCode().value());
+                        return response.createException()
+                                .flatMap(Mono::error);
+                    }
+                })
+                .block();
+
+        Gson gson = new Gson();
+        BeforePaymentVerificationItem beforePaymentVerificationItem = gson.fromJson(request, BeforePaymentVerificationItem.class);
+        return beforePaymentVerificationItem;
     }
 }

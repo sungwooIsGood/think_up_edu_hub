@@ -1,9 +1,14 @@
 package com.edu.domain.payment.dto;
 
+import com.edu.component.CommonComponent;
+import com.edu.domain.payment.entity.Payment;
+import com.edu.domain.payment.enums.PaymentMethod;
+import com.edu.domain.payment.enums.PaymentStatus;
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -24,7 +29,7 @@ public class PaymentResponse {
         private String merchantUid; // 가맹점 주문번호 (필수)
 
         @SerializedName("pay_method")
-        private String payMethod; // 결제수단 구분코드 (선택)
+        private PaymentMethod payMethod; // 결제수단 구분코드 (선택)
 
         @SerializedName("channel")
         private String channel; // 결제환경 구분코드 (선택)
@@ -90,7 +95,7 @@ public class PaymentResponse {
         private String name; // 제품명 (선택)
 
         @SerializedName("amount")
-        private double amount; // 결제금액 (필수)
+        private BigDecimal amount; // 결제금액 (필수)
 
         @SerializedName("cancel_amount")
         private double cancelAmount; // 취소금액 (필수)
@@ -120,21 +125,35 @@ public class PaymentResponse {
         private String userAgent; // 단말기의 UserAgent 문자열 (선택)
 
         @SerializedName("status")
-        private String status; // 결제상태 (필수)
+        private PaymentStatus status; // 결제상태 (필수)
 
         @SerializedName("started_at")
-        private int startedAt; // 요청 시갻 (선택)
+        private int startedAt; // 요청 시각 (선택)
 
         @SerializedName("paid_at")
-        private int paidAt; // 결제 시갻 (선택)
+        private Long paidAt; // 결제 시각 (선택)
 
         @SerializedName("failed_at")
-        private int failedAt; // 실패시갻 (선택)
+        private Long failedAt; // 실패시각 (선택)
 
         @SerializedName("cancelled_at")
-        private int cancelledAt; // 취소시갻 (선택)
+        private Long cancelledAt; // 취소시각 (선택)
 
         @SerializedName("fail_reason")
-        private String failReason; // 결제실패 사유 (
+        private String failReason; // 결제실패 사유
+    }
+
+    public Payment createdPayment(Long userId,Long matchedLectureId,Long lectureId){
+        return Payment.builder()
+                .userId(userId)
+                .matchedLectureId(matchedLectureId)
+                .lectureId(lectureId)
+                .payDay(CommonComponent.convertTimestampToLocalDateTime(this.responseData.paidAt))
+                .price(responseData.amount)
+                .payMethod(responseData.payMethod)
+                .paymentStatus(this.responseData.status)
+                .impUid(this.responseData.impUid)
+                .merchantUid(this.responseData.merchantUid)
+                .build();
     }
 }
