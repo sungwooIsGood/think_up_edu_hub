@@ -49,7 +49,7 @@ public class Payment extends BaseEntity {
         this.impUid = impUid;
         this.merchantUid = merchantUid;
         this.cancelReason = cancelReason;
-        this.canceledDay = canceledDay
+        this.canceledDay = canceledDay;
     }
 
     public void cancelPayment(Long cancelledAt, PaymentStatus paymentStatus) {

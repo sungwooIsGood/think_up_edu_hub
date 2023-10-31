@@ -2,15 +2,42 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="772b8c6f-bf3f-4eaf-940e-311b4a080872" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/think-up-edu-hub/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/lecture/build.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/lecture/src/main/java/com/edu/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/build.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/payment/build.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/application/matchedLecture/MatchedLectureSchedulerService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/application/matchedLecture/MatchedLectureService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/application/matchedLecture/RedissonDistributedLockService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/application/matchedLecture/scheduler/MatchedLecturePayCheckScheduler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/application/payment/PaymentService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/domain/matchedLecture/dto/EmailDetailItem.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/domain/matchedLecture/dto/MatchedLectureDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/domain/matchedLecture/dto/SendEmailEventQueue.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/domain/matchedLecture/entity/MatchedLecture.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/domain/matchedLecture/repository/MatchedLectureJRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/domain/matchedLecture/repository/MatchedLectureRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/domain/matchedLecture/service/EmailMessageQueue.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/domain/matchedLecture/value/LoginInfo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/domain/matchedLecture/value/UserInfo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/domain/payment/dto/AccessTokenResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/domain/payment/dto/BeforePaymentVerificationItem.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/domain/payment/dto/PaymentCancelAnnotation.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/domain/payment/dto/PaymentCancelRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/domain/payment/dto/PaymentDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/domain/payment/dto/PaymentResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/domain/payment/dto/PaymentVerificationRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/domain/payment/entity/Payment.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/domain/payment/enums/PaymentMethod.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/domain/payment/enums/PaymentStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/domain/payment/repository/PaymentJRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/domain/payment/service/ExternalPaymentService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/infrastructure/MailSenderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/infrastructure/MailSenderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/infrastructure/database/querydsl/EmailMessageQueueImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/infrastructure/database/querydsl/EmailMessageQueueImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/infrastructure/database/querydsl/MatchedLectureQRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/infrastructure/database/querydsl/MatchedLectureQRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/infrastructure/events/SendEmailEventHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/infrastructure/events/SendEmailEventHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/infrastructure/external/PortOnePaymentService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/presentation/controller/matchedLecture/MatchedLectureController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/presentation/controller/payment/PaymentController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/main/java/com/edu/testHtml/payment.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/test/java/com/edu/application/RedissonDistributedLockServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/think-up-edu-hub/matchedLecture/src/test/java/com/edu/application/RedissonDistributedLockServiceTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/think-up-edu-hub/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/think-up-edu-hub/settings.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/user/build.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/think-up-edu-hub/user/src/main/java/com/edu/Main.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

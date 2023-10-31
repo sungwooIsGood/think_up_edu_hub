@@ -79,7 +79,7 @@ public class PaymentService {
             throw new IllegalStateException("저장되어있는 가격의 정보와 다릅니다.");
         }
 
-        PaymentDto paymentDto = paymentJRepository.findByAmountAndMerchantUid(amount, merchantUuid);
+        PaymentDto paymentDto = paymentJRepository.findByPriceAndMerchantUid(amount, merchantUuid);
 
         if(!merchantUuid.equals(paymentDto.getMatchedLectureId()) || !amount.equals(paymentDto.getPrice())){
             log.info("request 값, merchant_uid: {}, amount: {}, / DB 값: merchant_uid: {}, amount: {}",
