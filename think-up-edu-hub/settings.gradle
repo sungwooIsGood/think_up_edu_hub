@@ -1,8 +1,8 @@
 rootProject.name = 'think-up-edu-hub'
 include 'core'
 include 'lecture'
-include 'payment'
 include 'user'
 include 'matchedLecture'
 include 'common'
+include 'payment'
 

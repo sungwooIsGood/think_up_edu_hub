@@ -1,9 +1,9 @@
 package com.edu.infrastructure.events;
 
-import com.edu.domain.matchedLecture.dto.EmailDetailItem;
-import com.edu.domain.matchedLecture.dto.SendEmailEventQueue;
-import com.edu.domain.matchedLecture.repository.MatchedLectureJRepository;
-import com.edu.infrastructure.MailSenderService;
+import com.edu.domain.dto.EmailDetailItem;
+import com.edu.domain.dto.SendEmailEventQueue;
+import com.edu.domain.repository.MatchedLectureJRepository;
+import com.edu.infrastructure.service.MailSenderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;

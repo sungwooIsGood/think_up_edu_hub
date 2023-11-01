@@ -2,7 +2,6 @@ package com.edu.domain.value;
 
 import com.edu.domain.enums.RoleType;
 import com.edu.domain.enums.UserType;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

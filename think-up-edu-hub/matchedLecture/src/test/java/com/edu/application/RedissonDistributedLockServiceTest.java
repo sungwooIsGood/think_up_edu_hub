@@ -1,6 +1,5 @@
 package com.edu.application;
 
-import com.edu.application.matchedLecture.RedissonDistributedLockService;
 import com.edu.domain.dto.LectureRegisterRequest;
 import com.edu.domain.dto.UserSignUpRequest;
 import com.edu.domain.entity.Lecture;
@@ -8,7 +7,7 @@ import com.edu.domain.entity.User;
 import com.edu.domain.enums.LectureType;
 import com.edu.domain.enums.UserType;
 import com.edu.domain.repository.LectureJRepository;
-import com.edu.domain.matchedLecture.repository.MatchedLectureJRepository;
+import com.edu.domain.repository.MatchedLectureJRepository;
 import com.edu.domain.repository.UserJRepository;
 import com.edu.domain.value.LectureState;
 import org.assertj.core.api.Assertions;
