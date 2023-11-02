@@ -59,10 +59,6 @@
 
 - think-up-edu-hub 프로젝트
 
-### 설계 모듈 이미지
+### DDD 아키텍쳐를 경험 해보고 적어보는 회고록
+[토이 프로젝트 회고록](https://airy-palm-685.notion.site/cf7726421e45480182d4f6b97dd0181d?pvs=4)
 
-![module.jpg](https://mail.naver.com/read/image/original/?mimeSN=1698904496.917092.56269.34560&offset=1569&size=99198&u=tjddn3927&cid=3b70d3967a8a94c3c6454253659f2676@cweb006.nm.nfra.io&contentType=image/jpeg&filename=1698904492063.jpeg&org=1)
-
-
-- DDD 아키텍쳐를 경험 해보고 적어보는 회고록
-https://airy-palm-685.notion.site/cf7726421e45480182d4f6b97dd0181d?pvs=4
