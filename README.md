@@ -61,4 +61,4 @@
 
 ### 설계 모듈
 
-![module.jpg](https://prod-files-secure.s3.us-west-2.amazonaws.com/c4208ea1-f20c-48bd-b05a-8f485cb16b9b/38528b62-6250-488c-ba49-fef84a17ac71/module.jpg)
+![module.jpg]([https://prod-files-secure.s3.us-west-2.amazonaws.com/c4208ea1-f20c-48bd-b05a-8f485cb16b9b/38528b62-6250-488c-ba49-fef84a17ac71/module.jpg](https://www.notion.so/cf7726421e45480182d4f6b97dd0181d?pvs=4#c2acfcc8b80d423ab6c210fcdb85a9d7)https://www.notion.so/cf7726421e45480182d4f6b97dd0181d?pvs=4#c2acfcc8b80d423ab6c210fcdb85a9d7)
