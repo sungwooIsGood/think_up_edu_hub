@@ -59,6 +59,10 @@
 
 - think-up-edu-hub 프로젝트
 
-### 설계 모듈
+### 설계 모듈 이미지
 
-![module.jpg]([https://prod-files-secure.s3.us-west-2.amazonaws.com/c4208ea1-f20c-48bd-b05a-8f485cb16b9b/38528b62-6250-488c-ba49-fef84a17ac71/module.jpg](https://www.notion.so/cf7726421e45480182d4f6b97dd0181d?pvs=4#c2acfcc8b80d423ab6c210fcdb85a9d7)https://www.notion.so/cf7726421e45480182d4f6b97dd0181d?pvs=4#c2acfcc8b80d423ab6c210fcdb85a9d7)
+![module.jpg](https://mail.naver.com/read/image/original/?mimeSN=1698904496.917092.56269.34560&offset=1569&size=99198&u=tjddn3927&cid=3b70d3967a8a94c3c6454253659f2676@cweb006.nm.nfra.io&contentType=image/jpeg&filename=1698904492063.jpeg&org=1)
+
+
+- DDD 아키텍쳐를 경험 해보고 적어보는 회고록
+https://airy-palm-685.notion.site/cf7726421e45480182d4f6b97dd0181d?pvs=4
