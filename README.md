@@ -56,8 +56,13 @@
     - 결제가 됐는지 하루에 한번씩 이메일을 보낸다.
 
 ### 바운더리 컨텍스트
-
 - think-up-edu-hub 프로젝트
+
+### 모듈 설계도
+![module](https://github.com/sungwooIsGood/think_up_edu_hub/assets/98163632/e9262d3b-ded8-4183-b234-5a4fd4f281b4)
+
+
+
 
 ### DDD 아키텍쳐를 경험 해보고 적어보는 회고록
 [토이 프로젝트 회고록](https://airy-palm-685.notion.site/cf7726421e45480182d4f6b97dd0181d?pvs=4)
